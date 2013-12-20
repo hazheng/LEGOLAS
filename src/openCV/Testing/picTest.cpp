@@ -7,6 +7,7 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
+
 	Mat image = imread(argv[1]);
 	if(image.data == NULL)
 		return 0;
