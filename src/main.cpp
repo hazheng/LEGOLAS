@@ -4,8 +4,14 @@
 
 using namespace std;
 
+cv::Mat threshIm(cv::Mat image_in){
+	cv::Mat hsv;
+	cv::cvtColor(image_in,hsv,cv::CV_BGR2HSV);
+	return hsv;
+}
+
 int main(int argc, char** argv)
-{
+{ 
 	if (argc!=2)
 	{
 		printf("%s\n","Usage: ./binary imagePath" );
