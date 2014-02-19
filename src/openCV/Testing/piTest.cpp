@@ -7,6 +7,8 @@ using namespace cv;
 void exitHandler(int s)
 {
 	std::cout << "Ctrl-c pressed!" << std::endl;
+	GPIOWrite(17, LOW);
+	GPIOUnexport(17);
 	exit(1);
 }
 
@@ -20,6 +22,10 @@ int main(int argc, char *argv[])
 		return -1;
 
 	std::cout << "webcam opened" << std::endl;
+
+	if(GPIOExport(17) == -1 || GPIODirection(17, OUT) == -1)
+		return -1;
+	std::cout << "GPIO opened" <<std::endl;
 
 	Mat thresholded;
 	Mat imageFrame;
@@ -44,10 +50,16 @@ int main(int argc, char *argv[])
 		cvtColor(imageFrame, hsvImage, CV_RGB2HSV);
 
 		applyThreshold(hueLower,hueUpper,sat,lum, hsvImage, thresholded);
-		std::cout << determineHot(thresholded, imageFrame)<< std::endl;
-
-
+		if(determineHot(thresholded, imageFrame))
+		{
+			std::cout << "true" << std::endl;
+			GPIOWrite(17, HIGH);
+		}
+		else
+		{
+			std::cout <<"false" <<std::endl;
+			GPIOWrite(17, LOW);
+		}//end if
 	}//end for
-
 }//end main
 
